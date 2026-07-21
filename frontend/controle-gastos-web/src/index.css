@@ -1,0 +1,35 @@
+:root {
+  --cor-primaria: #2563eb;
+  --cor-primaria-escura: #1d4ed8;
+  --cor-fundo: #f4f6fb;
+  --cor-cartao: #ffffff;
+  --cor-texto: #1e293b;
+  --cor-texto-suave: #64748b;
+  --cor-borda: #e2e8f0;
+  --cor-sucesso: #16a34a;
+  --cor-erro: #dc2626;
+  --cor-receita: #16a34a;
+  --cor-despesa: #dc2626;
+  --sombra: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --raio: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input, select {
+  font-family: inherit;
+}

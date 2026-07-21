@@ -1,0 +1,25 @@
+# ===== BACKEND (.NET) =====
+backend/**/bin/
+backend/**/obj/
+backend/**/*.user
+backend/**/appsettings.Development.json
+backend/**/controlegastos.db
+backend/**/controlegastos.db-shm
+backend/**/controlegastos.db-wal
+backend/**/*.pdb
+
+# ===== FRONTEND (Node/Vite) =====
+frontend/**/node_modules/
+frontend/**/dist/
+frontend/**/dist-ssr/
+frontend/**/.env
+frontend/**/.env.local
+frontend/**/*.local
+
+# ===== EDITORES/SO =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+.env
