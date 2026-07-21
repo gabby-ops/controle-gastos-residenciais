@@ -9,4 +9,10 @@ public interface IPessoaRepository
     Task<Pessoa> CriarAsync(Pessoa pessoa);
     Task<bool> ExcluirAsync(int id);
     Task<bool> ExisteAsync(int id);
+
+    /// <summary>
+    /// Verifica se já existe uma pessoa cadastrada com o mesmo nome
+    /// (comparação sem diferenciar maiúsculas/minúsculas).
+    /// </summary>
+    Task<bool> ExisteComNomeAsync(string nome);
 }

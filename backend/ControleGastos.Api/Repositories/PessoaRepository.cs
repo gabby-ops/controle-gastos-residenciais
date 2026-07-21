@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleGastos.Api.Repositories;
 
+/// <summary>
+/// Implementa o acesso a dados da entidade Pessoa usando Entity Framework Core.
+/// </summary>
 public class PessoaRepository : IPessoaRepository
 {
     private readonly AppDbContext _context;
@@ -40,4 +43,12 @@ public class PessoaRepository : IPessoaRepository
 
     public async Task<bool> ExisteAsync(int id) =>
         await _context.Pessoas.AnyAsync(p => p.Id == id);
+
+    /// <summary>
+    /// Compara nomes ignorando maiúsculas/minúsculas usando ToLower(),
+    /// já que o SQLite não garante comparação case-insensitive por padrão
+    /// com o operador de igualdade em todas as configurações.
+    /// </summary>
+    public async Task<bool> ExisteComNomeAsync(string nome) =>
+        await _context.Pessoas.AnyAsync(p => p.Nome.ToLower() == nome.ToLower());
 }

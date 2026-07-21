@@ -30,15 +30,19 @@ public class PessoasController : ControllerBase
 
     /// <summary>
     /// Cadastra uma nova pessoa. Validações de nome/idade são feitas
-    /// via DataAnnotations no CriarPessoaDto e checadas pelo ModelState.
+    /// via DataAnnotations no CriarPessoaDto; a validação de nome
+    /// duplicado é feita no Service.
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarPessoaDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var pessoa = await _pessoaService.CriarAsync(dto);
-        return CreatedAtAction(nameof(ObterTodos), new { id = pessoa.Id }, pessoa);
+        var (sucesso, erro, pessoaDto) = await _pessoaService.CriarAsync(dto);
+
+        if (!sucesso) return BadRequest(new { erro });
+
+        return CreatedAtAction(nameof(ObterTodos), new { id = pessoaDto!.Id }, pessoaDto);
     }
 
     /// <summary>
