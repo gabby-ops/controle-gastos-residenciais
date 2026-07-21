@@ -5,6 +5,11 @@ using ControleGastos.Api.Validations;
 
 namespace ControleGastos.Api.Services;
 
+/// <summary>
+/// Contém a lógica de negócio do cadastro de transações: validação
+/// da pessoa, aplicação da regra do menor de idade e mapeamento
+/// entre entidade e DTO.
+/// </summary>
 public class TransacaoService : ITransacaoService
 {
     private readonly ITransacaoRepository _transacaoRepository;
@@ -22,6 +27,14 @@ public class TransacaoService : ITransacaoService
         return transacoes.Select(MapToDto).ToList();
     }
 
+    /// <summary>
+    /// Cria uma transação após validar:
+    /// 1) que a pessoa informada existe;
+    /// 2) que, se a pessoa for menor de 18 anos, o tipo não seja Receita.
+    /// Retorna uma tupla indicando sucesso/erro em vez de lançar exceção,
+    /// pois isso representa uma falha de validação de negócio esperada,
+    /// não um erro inesperado do sistema.
+    /// </summary>
     public async Task<(bool sucesso, string? erro, TransacaoDto? dto)> CriarAsync(CriarTransacaoDto dto)
     {
         var pessoa = await _pessoaRepository.ObterPorIdAsync(dto.PessoaId);
@@ -30,8 +43,6 @@ public class TransacaoService : ITransacaoService
             return (false, "Pessoa não encontrada.", null);
         }
 
-        // Regra de negócio central do sistema: menores de idade
-        // não podem cadastrar receitas.
         var (valido, erroRegra) = TransacaoValidator.ValidarRegraMenorIdade(pessoa, dto.Tipo);
         if (!valido)
         {
@@ -47,11 +58,12 @@ public class TransacaoService : ITransacaoService
         };
 
         var criada = await _transacaoRepository.CriarAsync(transacao);
-        criada.Pessoa = pessoa; // já temos os dados em memória, evita novo select
+        criada.Pessoa = pessoa; // evita um SELECT extra, já temos a pessoa em memória
 
         return (true, null, MapToDto(criada));
     }
 
+    /// <summary>Converte a entidade Transacao (com Pessoa carregada) em DTO de saída.</summary>
     private static TransacaoDto MapToDto(Transacao t) => new()
     {
         Id = t.Id,

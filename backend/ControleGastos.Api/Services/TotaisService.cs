@@ -4,6 +4,10 @@ using ControleGastos.Api.Repositories;
 
 namespace ControleGastos.Api.Services;
 
+/// <summary>
+/// Calcula o resumo financeiro por pessoa (receitas, despesas, saldo)
+/// e os totais gerais somando todas as pessoas.
+/// </summary>
 public class TotaisService : ITotaisService
 {
     private readonly IPessoaRepository _pessoaRepository;
@@ -15,6 +19,12 @@ public class TotaisService : ITotaisService
         _transacaoRepository = transacaoRepository;
     }
 
+    /// <summary>
+    /// Para cada pessoa, soma as transações do tipo Receita e do tipo
+    /// Despesa separadamente. O saldo (Receitas - Despesas) é calculado
+    /// como propriedade computada no próprio DTO. Ao final, os totais
+    /// gerais são a soma de todas as pessoas.
+    /// </summary>
     public async Task<TotaisResponseDto> ObterTotaisAsync()
     {
         var pessoas = await _pessoaRepository.ObterTodosAsync();

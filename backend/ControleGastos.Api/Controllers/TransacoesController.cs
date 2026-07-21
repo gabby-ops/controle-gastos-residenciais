@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ControleGastos.Api.Controllers;
 
+/// <summary>
+/// Expõe os endpoints REST para cadastro e listagem de transações
+/// financeiras (receitas e despesas) vinculadas a uma pessoa.
+/// </summary>
 [ApiController]
 [Route("api/transacoes")]
 public class TransacoesController : ControllerBase
@@ -15,6 +19,9 @@ public class TransacoesController : ControllerBase
         _transacaoService = transacaoService;
     }
 
+    /// <summary>
+    /// Lista todas as transações, incluindo o nome da pessoa vinculada.
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> ObterTodas()
     {
@@ -22,6 +29,11 @@ public class TransacoesController : ControllerBase
         return Ok(transacoes);
     }
 
+    /// <summary>
+    /// Cadastra uma nova transação. O Service valida se a pessoa existe
+    /// e se a regra de negócio do menor de idade é respeitada
+    /// (menores de 18 anos só podem cadastrar despesas).
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarTransacaoDto dto)
     {

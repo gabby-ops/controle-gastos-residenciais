@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ControleGastos.Api.Controllers;
 
+/// <summary>
+/// Expõe os endpoints REST para gerenciamento de pessoas (moradores).
+/// </summary>
 [ApiController]
 [Route("api/pessoas")]
 public class PessoasController : ControllerBase
@@ -15,6 +18,9 @@ public class PessoasController : ControllerBase
         _pessoaService = pessoaService;
     }
 
+    /// <summary>
+    /// Lista todas as pessoas cadastradas.
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> ObterTodos()
     {
@@ -22,6 +28,10 @@ public class PessoasController : ControllerBase
         return Ok(pessoas);
     }
 
+    /// <summary>
+    /// Cadastra uma nova pessoa. Validações de nome/idade são feitas
+    /// via DataAnnotations no CriarPessoaDto e checadas pelo ModelState.
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarPessoaDto dto)
     {
@@ -31,6 +41,10 @@ public class PessoasController : ControllerBase
         return CreatedAtAction(nameof(ObterTodos), new { id = pessoa.Id }, pessoa);
     }
 
+    /// <summary>
+    /// Exclui uma pessoa pelo Id. O banco de dados aplica Cascade Delete
+    /// automaticamente, removendo também todas as transações vinculadas.
+    /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Excluir(int id)
     {
